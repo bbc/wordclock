@@ -1,70 +1,58 @@
+<!DOCTYPE html>
 <html>
+<head>
     <style>
-        body { font-family: Arial, Helvetica, sans-serif }
-        .large-text { font-size: 4vw }
+        body { font-family: Arial, Helvetica, sans-serif; }
+        .large-text { font-size: 7vw; }
+        .medium-text { font-size: 5vw; }
+        .center { text-align: center; }
     </style>
-    
-    <div>
-        <center>
+</head>
+<body>
+    <div class="center">
         <h4>BBC Media Operations - Word Clock 2000</h4>
         <div class="large-text" id="words"></div>
-        <div class="large-text" id="time"></div>
-        </center>
+        <div class="medium-text" id="time"></div>
     </div>
 
     <script>
-        updateTime();
-    
-        setInterval(() => {
-            updateTime();
-        }, 500);
-    
         function updateTime() {
             const date = new Date();
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
+            const hours = 12;//date.getHours();
+            const minutes = 14;//date.getMinutes();
             document.getElementById("words").innerText = timeToWords(hours, minutes);
             document.getElementById("time").innerText = `${zeroPad(hours)}:${zeroPad(minutes)}`;
         }
-    
+
         function zeroPad(num) {
             return num < 10 ? "0" + num : num;
         }
-    
+
         function timeToWords(hours, minutes) {
             const numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
                 "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
-            const numbersHours = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+            const numbersHours = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
                 "eleven", "twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
             const tens = ["", "ten", "twenty", "thirty", "forty", "fifty"];
-    
+
             function numberToWords(num) {
                 if (num < 20) return numbers[num];
-                if (num < 60) return tens[Math.floor(num / 10)] + (num % 10 === 0 ? "" : " " + numbers[num % 10]);
-                return "";
+                return tens[Math.floor(num / 10)] + (num % 10 === 0 ? "" : " " + numbers[num % 10]);
             }
-    
-            function hoursToWords(num) {
-                return numbersHours[num];
-            }
-    
-            const nextHour = hoursToWords((hours % 12) + 1);
-            const currentHour = hoursToWords(hours);
-    
-            switch (minutes) {
-                case 0:
-                    return `${hoursToWords(hours)} o'clock`;    
-                case 15:
-                    return `quarter past ${currentHour}`;
-                case 30:
-                    return `half past ${currentHour}`;
-                case 45:
-                    return `quarter to ${nextHour}`;
-                default:
-                    if (minutes < 30) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
-                    const minutesTo = 60 - minutes;
-                    return `${numberToWords(minutesTo)} minute${minutesTo > 1 ? 's' : ''} to ${nextHour}`;
-            }
+
+            const nextHour = numbersHours[(hours % 12) + 1];
+            const currentHour = numbersHours[hours % 12];
+
+            if (minutes === 0) return `${currentHour} o'clock`;
+            if (minutes === 15) return `quarter past ${currentHour}`;
+            if (minutes === 30) return `half past ${currentHour}`;
+            if (minutes === 45) return `quarter to ${nextHour}`;
+            if (minutes < 30) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
+            return `${numberToWords(60 - minutes)} minute${60 - minutes > 1 ? 's' : ''} to ${nextHour}`;
         }
+
+        updateTime();
+        setInterval(updateTime, 500);
     </script>
+</body>
 </html>
