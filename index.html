@@ -1,0 +1,68 @@
+<html>
+<div>
+    <h4>BBC Media Operations Word Clock 2000</h4>
+
+        <center>
+            <h1 id="words"></h1>
+            <h2 id="time"></h2>
+        </center>
+
+</div>
+
+<script>
+    updateTime();
+
+    setInterval(() => {
+        updateTime();
+    }, 500);
+
+    function updateTime() {
+        const date = new Date();
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        document.getElementById("words").innerText = timeToWords(hours, minutes);
+        document.getElementById("time").innerText = `${zeroPad(hours)}:${zeroPad(minutes)}`;
+    }
+
+    function zeroPad(num) {
+        return num < 10 ? "0" + num : num;
+    }
+
+    function timeToWords(hours, minutes) {
+        const numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+            "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+        const numbersHours = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+            "eleven", "twelve", "one", "two", "three", "four", "five", "six", "seven"];
+        const tens = ["", "ten", "twenty", "thirty", "forty", "fifty"];
+
+        function numberToWords(num) {
+            if (num < 20) return numbers[num];
+            if (num < 60) return tens[Math.floor(num / 10)] + (num % 10 === 0 ? "" : " " + numbers[num % 10]);
+            return "";
+        }
+
+        function hoursToWords(num) {
+            return numbersHours[num];
+        }
+
+        const nextHour = hoursToWords((hours % 12) + 1);
+        const currentHour = hoursToWords(hours);
+
+        switch (minutes) {
+            case 0:
+                return `${hoursToWords(hours)} o'clock`;    
+            case 15:
+                return `quarter past ${currentHour}`;
+            case 30:
+                return `half past ${currentHour}`;
+            case 45:
+                return `quarter to ${nextHour}`;
+            default:
+                if (minutes < 30) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
+                const minutesTo = 60 - minutes;
+                return `${numberToWords(minutesTo)} minute${minutes > 1 ? 's' : ''} to ${nextHour}`;
+        }
+    }
+</script>
+
+</html>
