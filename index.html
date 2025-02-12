@@ -54,7 +54,7 @@
             if (minutes === 45) return `quarter to ${nextHour}`;
             if (minutes === 50) return `ten to ${currentHour}`;
             if (minutes === 55) return `five to ${currentHour}`;
-            if (minutes < 30) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
+            if (minutes < 35) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
             return `${numberToWords(60 - minutes)} minute${60 - minutes > 1 ? 's' : ''} to ${nextHour}`;
         }
 
