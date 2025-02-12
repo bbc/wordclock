@@ -18,8 +18,8 @@
     <script>
         function updateTime() {
             const date = new Date();
-            const hours = 12;//date.getHours();
-            const minutes = 14;//date.getMinutes();
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
             document.getElementById("words").innerText = timeToWords(hours, minutes);
             document.getElementById("time").innerText = `${zeroPad(hours)}:${zeroPad(minutes)}`;
         }
