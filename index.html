@@ -1,65 +1,95 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; }
-        .large-text { font-size: 7vw; }
-        .medium-text { font-size: 5vw; }
-        .center { text-align: center; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .large-text {
+            font-size: 7vw;
+        }
+
+        .medium-text {
+            font-size: 5vw;
+        }
+
+        .center {
+            text-align: center;
+        }
     </style>
 </head>
+
 <body>
     <div class="center">
         <h4>BBC Media Operations - Word Clock 2000</h4>
+        <div class="medium-text" id="prelim">It is</div>
         <div class="large-text" id="words"></div>
         <div class="medium-text" id="time"></div>
     </div>
 
     <script>
         function updateTime() {
-            const date = new Date();
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
-            document.getElementById("words").innerText = timeToWords(hours, minutes);
-            document.getElementById("time").innerText = `${zeroPad(hours)}:${zeroPad(minutes)}`;
-        }
+            let date = new Date();
+            const seconds = date.getSeconds();
 
-        function zeroPad(num) {
-            return num < 10 ? "0" + num : num;
-        }
-
-        function timeToWords(hours, minutes) {
-            const numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-                "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
-            const numbersHours = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-                "eleven", "twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
-            const tens = ["", "ten", "twenty", "thirty", "forty", "fifty"];
-
-            function numberToWords(num) {
-                if (num < 20) return numbers[num];
-                return tens[Math.floor(num / 10)] + (num % 10 === 0 ? "" : " " + numbers[num % 10]);
+            let prelim = "it's";
+            if (seconds < 10) prelim = "it's just turned";
+            if (seconds > 50) {
+                prelim = "it's almost";
+                date = roundToNearestMinute(date);
             }
 
-            const nextHour = numbersHours[(hours % 12) + 1];
-            const currentHour = numbersHours[hours % 12];
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                document.getElementById("prelim").innerText = `${prelim}`;
+                document.getElementById("words").innerText = timeToWords(hours, minutes);
+                document.getElementById("time").innerText = `${zeroPad(hours)}:${zeroPad(minutes)}`;
+            }
 
-            if (minutes === 0) return `${currentHour} o'clock`;
-            if (minutes === 10) return `ten past ${currentHour}`;
-            if (minutes === 15) return `quarter past ${currentHour}`;
-            if (minutes === 20) return `twenty past ${currentHour}`;
-            if (minutes === 25) return `twenty five past ${currentHour}`;
-            if (minutes === 30) return `half past ${currentHour}`;
-            if (minutes === 35) return `twenty five to ${currentHour}`;
-            if (minutes === 40) return `twenty to ${currentHour}`;
-            if (minutes === 45) return `quarter to ${nextHour}`;
-            if (minutes === 50) return `ten to ${currentHour}`;
-            if (minutes === 55) return `five to ${currentHour}`;
-            if (minutes < 35) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
-            return `${numberToWords(60 - minutes)} minute${60 - minutes > 1 ? 's' : ''} to ${nextHour}`;
-        }
+            var roundToNearestMinute = function (date) {
+                var coeff = 1000 * 60 * 1; // <-- Replace {1} with interval
+                return new Date(Math.round(date.getTime() / coeff) * coeff);
+            };
 
-        updateTime();
-        setInterval(updateTime, 500);
+            function zeroPad(num) {
+                return num < 10 ? "0" + num : num;
+            }
+
+            function timeToWords(hours, minutes) {
+                const numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+                    "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+                const numbersHours = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+                    "eleven", "twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+                const tens = ["", "ten", "twenty", "thirty", "forty", "fifty"];
+
+                function numberToWords(num) {
+                    if (num < 20) return numbers[num];
+                    return tens[Math.floor(num / 10)] + (num % 10 === 0 ? "" : " " + numbers[num % 10]);
+                }
+
+                const nextHour = numbersHours[(hours % 12) + 1];
+                const currentHour = numbersHours[hours % 12];
+
+                if (minutes === 0) return `${currentHour} o'clock`;
+                if (minutes === 10) return `ten past ${currentHour}`;
+                if (minutes === 15) return `quarter past ${currentHour}`;
+                if (minutes === 20) return `twenty past ${currentHour}`;
+                if (minutes === 25) return `twenty five past ${currentHour}`;
+                if (minutes === 30) return `half past ${currentHour}`;
+                if (minutes === 35) return `twenty five to ${currentHour}`;
+                if (minutes === 40) return `twenty to ${currentHour}`;
+                if (minutes === 45) return `quarter to ${nextHour}`;
+                if (minutes === 50) return `ten to ${currentHour}`;
+                if (minutes === 55) return `five to ${currentHour}`;
+                if (minutes < 35) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
+                return `${numberToWords(60 - minutes)} minute${60 - minutes > 1 ? 's' : ''} to ${nextHour}`;
+            }
+
+            updateTime();
+            setInterval(updateTime, 100);
     </script>
 </body>
+
 </html>
