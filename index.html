@@ -78,13 +78,14 @@
                 if (minutes === 20) return `twenty past ${currentHour}`;
                 if (minutes === 25) return `twenty five past ${currentHour}`;
                 if (minutes === 30) return `half past ${currentHour}`;
-                if (minutes === 35) return `twenty five to ${currentHour}`;
-                if (minutes === 40) return `twenty to ${currentHour}`;
+                if (minutes === 35) return `twenty five to ${nextHour}`;
+                if (minutes === 40) return `twenty to ${nextHour}`;
                 if (minutes === 45) return `quarter to ${nextHour}`;
-                if (minutes === 50) return `ten to ${currentHour}`;
-                if (minutes === 55) return `five to ${currentHour}`;
+                if (minutes === 50) return `ten to ${nextHour}`;
+                if (minutes === 55) return `five to ${nextHour}`;
                 if (minutes < 35) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
-                return `${numberToWords(60 - minutes)} minute${60 - minutes > 1 ? 's' : ''} to ${nextHour}`;
+                const minutesToNextHour = 60 - minutes;
+                return `${numberToWords(minutesToNextHour)} minute${minutesToNextHour > 1 ? 's' : ''} to ${nextHour}`;
             }
 
             updateTime();
