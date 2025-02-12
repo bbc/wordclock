@@ -44,9 +44,16 @@
             const currentHour = numbersHours[hours % 12];
 
             if (minutes === 0) return `${currentHour} o'clock`;
+            if (minutes === 10) return `ten past ${currentHour}`;
             if (minutes === 15) return `quarter past ${currentHour}`;
+            if (minutes === 20) return `twenty past ${currentHour}`;
+            if (minutes === 25) return `twenty five past ${currentHour}`;
             if (minutes === 30) return `half past ${currentHour}`;
+            if (minutes === 35) return `twenty five to ${currentHour}`;
+            if (minutes === 40) return `twenty to ${currentHour}`;
             if (minutes === 45) return `quarter to ${nextHour}`;
+            if (minutes === 50) return `ten to ${currentHour}`;
+            if (minutes === 55) return `five to ${currentHour}`;
             if (minutes < 30) return `${numberToWords(minutes)} minute${minutes > 1 ? 's' : ''} past ${currentHour}`;
             return `${numberToWords(60 - minutes)} minute${60 - minutes > 1 ? 's' : ''} to ${nextHour}`;
         }
